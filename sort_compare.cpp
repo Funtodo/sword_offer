@@ -6,7 +6,7 @@ using namespace std;
 
 typedef int ElemTtype; 
 void swap(ElemTtype &a, ElemTtype &b);
-
+void printArray(ElemTtype* A,int len);
 //=========简单排序算法实现========
 //输入：待排表（int数组），数组长度
 //输出：升序排列的数组
@@ -153,17 +153,81 @@ void SelectSort(ElemTtype* A,int len){
 			swap(A[iMin], A[i]);	//把第i趟最小的元素放在i位置
 	}
 }
+
 //------------堆排序------------------------
+//（大根堆，得到的是从小到大）
+inline void BuildMaxHeap(ElemTtype* A,int len);		//建立初始大根堆
+void AdjustDown(ElemTtype* A,int k, int len);		//沿着某个节点往下调整
 void HeapSort(ElemTtype* A,int len){
-
-}
-
-void printArray(ElemTtype* A,int len){
-	for(int i=0;i<len;i++){
-		cout<<A[i]<<" ";
+	if(A==NULL || len<=0)	return;
+	BuildMaxHeap(A,len);			//建立初始大根堆
+	for(int i=len-1; i>0; --i){		//>0因为最后只有一个元素时不用调整
+		swap(A[0], A[i]);			//将堆的根节点（最大元素）放到最后面（与最后一个元素交换）
+		AdjustDown(A,0,i);			//从根节点开始调整堆，同时堆的长度减1
 	}
-	cout<<endl;
 }
+void BuildMaxHeap(ElemTtype* A,int len){
+	for(int i=(len-1)/2; i>=0; --i)		//从最后一个非叶节点到根节点，反复调整堆（节点从0~len-1编号）
+		AdjustDown(A,i,len);
+}
+void AdjustDown(ElemTtype* A,int k, int len){
+	if( k > (len-1)/2 || len==1)	//!!!!-叶子节点(!或者只有一个节点 )，不用调整，直接返回---递归结束条件，也是防止A[2*k+1]越界的条件
+		return;
+	//找到当前非叶节点的最大的孩子节点
+	//int iMaxSon = A[2*k+1]>A[2*k+2] ? (2*k+1):(2*k+2);//错误，有可能只有一个左子节点	//找到大的子节点	//从1开始编号，左子节点正好是2k，但是0开始，则是2k+1
+	int iMaxSon = 2*k+1;
+	if(2*k+2<len)										//存在右孩子节点，比较两个孩子节点
+		iMaxSon = A[2*k+1]>A[2*k+2] ? (2*k+1):(2*k+2);		
+
+	if(A[k]>=A[iMaxSon])									//不用调整
+		return;
+	swap(A[k],A[iMaxSon]);									//子节点大于父节点，则交换
+	AdjustDown(A,iMaxSon,len);								//沿着有调整的子节点继续往下调整
+}
+
+//------------归并排序----------------------
+void MergeSortCore(ElemTtype* A,int low,int high);	//递归归并排序
+void merge(ElemTtype *A,int low,int mid,int high);	//将两个子序列合并
+void MergeSort(ElemTtype* A,int len){
+	if(A==NULL || len<=0)
+		return;
+	MergeSortCore(A,0,len-1);	//递归
+}
+//二路归并排序
+void MergeSortCore(ElemTtype* A,int low,int high){
+	if(low<high){
+		int mid = (low+high)/2;			//从中间划分为两个子序列
+		MergeSortCore(A, low,mid);		//对左半边归并排序
+		MergeSortCore(A,mid+1,high);	//对右半边归并排序
+		merge(A,low,mid,high);			//归并
+	}
+}
+//采用辅助数组进行
+void merge(ElemTtype *A,int low,int mid,int high){
+	//子序列A1:low-mid;A2:mid+1,high;
+	ElemTtype *lowB = new ElemTtype[mid-low+1];		//注意前后段数组长度的计算
+	ElemTtype *highB = new ElemTtype[high-mid];
+	for(int i =low; i<=mid; ++i)		//将要合并的左半段复制给lowB数组
+		lowB[i-low] = A[i];
+	for(int i =mid+1; i<=high; ++i)		//将要合并的右半段复制给highB数组
+		highB[i-(mid+1)] = A[i];
+
+	int i=0,j=0,k=low;					//i--lowB的指针，j--highB的指针，k--A的指针
+	while( i< mid-low+1 && j< high-mid && k<= high){	//比较lowB，highB，每次把小的先复制回A中
+		if( lowB[i] <= highB[j] )
+			A[k++] = lowB[i++];
+		else
+			A[k++] = highB[j++];
+	}
+	while( i< mid-low+1)
+		A[k++] = lowB[i++];		//若第一个表未检测完
+	while( j< high-mid )
+		A[k++] = highB[j++];		//若第二个表未检测完
+
+	delete []lowB;
+	delete []highB;
+}
+
 
 void swap(ElemTtype &a, ElemTtype &b){
 	ElemTtype tmp = a;
@@ -176,7 +240,13 @@ ElemTtype* copy(ElemTtype* myArray_origin,int len){
 		copys[i] = myArray_origin[i];
 	return copys;
 }
-/*
+void printArray(ElemTtype* A,int len){
+	for(int i=0;i<len;i++){
+		cout<<A[i]<<" ";
+	}
+	cout<<endl;
+}
+
 int main()
 {
 	ElemTtype myArray_origin[] = {3,18,2,6,17,9,10,1,5,2,12,23,18,6,14,25,6};
@@ -212,7 +282,10 @@ int main()
 	cout<<"堆排序：        ";
 	HeapSort(myArray, len); printArray(myArray, len);
 
+	delete myArray; myArray = copy(myArray_origin,len);
+	cout<<"归并排序：      ";
+	MergeSort(myArray, len); printArray(myArray, len);
+	
 	system("pause");
 	return 0;
 }
-*/
