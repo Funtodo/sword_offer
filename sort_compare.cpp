@@ -2,6 +2,7 @@
 #include<iostream>
 #include <stdio.h>
 #include<ctime>
+#include<map>
 using namespace std;
 
 typedef int ElemTtype; 
@@ -161,7 +162,8 @@ void AdjustDown(ElemTtype* A,int k, int len);		//沿着某个节点往下调整
 void HeapSort(ElemTtype* A,int len){
 	if(A==NULL || len<=0)	return;
 	BuildMaxHeap(A,len);			//建立初始大根堆
-	for(int i=len-1; i>0; --i){		//>0因为最后只有一个元素时不用调整
+	//cout<<endl<<"建立初始大根堆：";printArray(A,len);
+	for(int i=len-1;  i>0; --i){		//>0因为最后只有一个元素时不用调整
 		swap(A[0], A[i]);			//将堆的根节点（最大元素）放到最后面（与最后一个元素交换）
 		AdjustDown(A,0,i);			//从根节点开始调整堆，同时堆的长度减1
 	}
@@ -171,10 +173,11 @@ void BuildMaxHeap(ElemTtype* A,int len){
 		AdjustDown(A,i,len);
 }
 void AdjustDown(ElemTtype* A,int k, int len){
-	if( k > (len-1)/2 || len==1)	//!!!!-叶子节点(!或者只有一个节点 )，不用调整，直接返回---递归结束条件，也是防止A[2*k+1]越界的条件
+	//if( k > (len-2)/2 || len==1)	// (len-2)/2最后一个非叶节点（比较绕，直接改用判断其 左孩子节点 是否存在，从而判断是否为叶子节点）
+	if( 2*k+1 >= len || len==1)		//!!!!-叶子节点(!或者只有一个节点 )，不用调整，直接返回---递归结束条件
 		return;
 	//找到当前非叶节点的最大的孩子节点
-	//int iMaxSon = A[2*k+1]>A[2*k+2] ? (2*k+1):(2*k+2);//错误，有可能只有一个左子节点	//找到大的子节点	//从1开始编号，左子节点正好是2k，但是0开始，则是2k+1
+	//int iMaxSon = A[2*k+1]>A[2*k+2] ? (2*k+1):(2*k+2);//错误，有可能只有一个左子节点	//从1开始编号，左子节点正好是2k，但是0开始，则是2k+1
 	int iMaxSon = 2*k+1;
 	if(2*k+2<len)										//存在右孩子节点，比较两个孩子节点
 		iMaxSon = A[2*k+1]>A[2*k+2] ? (2*k+1):(2*k+2);		
@@ -188,6 +191,7 @@ void AdjustDown(ElemTtype* A,int k, int len){
 //------------归并排序----------------------
 void MergeSortCore(ElemTtype* A,int low,int high);	//递归归并排序
 void merge(ElemTtype *A,int low,int mid,int high);	//将两个子序列合并
+//---
 void MergeSort(ElemTtype* A,int len){
 	if(A==NULL || len<=0)
 		return;
@@ -228,7 +232,37 @@ void merge(ElemTtype *A,int low,int mid,int high){
 	delete []highB;
 }
 
+//-----------基数排序-----------------------
+int GetNDigit(int nNumber, int nIdx);
+void DistributeCollectOnNdigit(ElemTtype* A,int len,int nDigit);
+//暂不考虑负数，如果考虑负数，最后对符号位排序----
+//传入参数，maxDigit--表示待排表中数字最大位数
+void RadixSorting(ElemTtype* A,int len, int maxDigit){
+	for(int i=0;i<maxDigit; ++i)
+		DistributeCollectOnNdigit(A,len,i);		//在某位上进行分配收集
+}
+void DistributeCollectOnNdigit(ElemTtype* A,int len,int nDigit){
+	//使用multimap，本身就是关键字排序的，且一个关键字允许有多个实例
+	multimap<int,ElemTtype> bins;
+	for(int i=0;i<len;++i){								//分配
+		//bins[3] = 6;   //错误，，因为multiset时，bins[3]对应的是一段范围
+		bins.insert(make_pair(GetNDigit(A[i],nDigit), A[i]));
+	}
+	multimap<int, ElemTtype>::const_iterator p = bins.begin();
+	int i = 0;
+	for( ; p!=bins.end(),i<len; ++p,++i)			//搜集
+		A[i] = p->second;
+}
+int GetNDigit(int nNumber, int nIdx)  
+{  
+	for (int i = nIdx; i > 0; i--) {  
+		nNumber /= 10;  
+	}  
+	return nNumber % 10;  
+} 
 
+
+//--辅助函数--
 void swap(ElemTtype &a, ElemTtype &b){
 	ElemTtype tmp = a;
 	a = b;
@@ -249,7 +283,10 @@ void printArray(ElemTtype* A,int len){
 
 int main()
 {
-	ElemTtype myArray_origin[] = {3,18,2,6,17,9,10,1,5,2,12,23,18,6,14,25,6};
+	//ElemTtype myArray_origin[] = {3,18,2,6,17,9,10,1,5,2,12,23,18,6,14,25,6};
+	//ElemTtype myArray_origin[] = {3,178,2,61,17,9,10,1,51,2,12,23,138,6,14,25,63};
+	ElemTtype myArray_origin[] = {3,178,-2,61,17,9,10,1,51,2,12,23,-138,6,14,25,63};
+	//ElemTtype myArray_origin[] = {53,17,78,9,45,65,87,32};
 	int len = sizeof(myArray_origin)/sizeof(myArray_origin[0]);
 	cout<<"原数组：        ";
 	printArray(myArray_origin, len);
@@ -285,6 +322,10 @@ int main()
 	delete myArray; myArray = copy(myArray_origin,len);
 	cout<<"归并排序：      ";
 	MergeSort(myArray, len); printArray(myArray, len);
+
+	delete myArray; myArray = copy(myArray_origin,len);
+	cout<<"基数排序：      ";
+	RadixSorting(myArray, len,3); printArray(myArray, len);
 	
 	system("pause");
 	return 0;
