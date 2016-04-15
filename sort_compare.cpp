@@ -235,7 +235,7 @@ void merge(ElemTtype *A,int low,int mid,int high){
 //-----------基数排序-----------------------
 int GetNDigit(int nNumber, int nIdx);
 void DistributeCollectOnNdigit(ElemTtype* A,int len,int nDigit);
-//暂不考虑负数，如果考虑负数，最后对符号位排序----
+//负数也OK，有负数时，bins有19个桶（-1~-9,0~9），即获得某位的数字时是带符号的----
 //传入参数，maxDigit--表示待排表中数字最大位数
 void RadixSorting(ElemTtype* A,int len, int maxDigit){
 	for(int i=0;i<maxDigit; ++i)
@@ -253,13 +253,11 @@ void DistributeCollectOnNdigit(ElemTtype* A,int len,int nDigit){
 	for( ; p!=bins.end(),i<len; ++p,++i)			//搜集
 		A[i] = p->second;
 }
-int GetNDigit(int nNumber, int nIdx)  
-{  
-	for (int i = nIdx; i > 0; i--) {  
-		nNumber /= 10;  
-	}  
-	return nNumber % 10;  
-} 
+int GetNDigit(int nNumber, int nIdx){	//-123,1==>-2; 543,2==>5
+	for (int i = nIdx; i > 0; --i)
+		nNumber /= 10;
+	return nNumber % 10;
+}
 
 
 //--辅助函数--
@@ -285,7 +283,7 @@ int main()
 {
 	//ElemTtype myArray_origin[] = {3,18,2,6,17,9,10,1,5,2,12,23,18,6,14,25,6};
 	//ElemTtype myArray_origin[] = {3,178,2,61,17,9,10,1,51,2,12,23,138,6,14,25,63};
-	ElemTtype myArray_origin[] = {3,178,-2,61,17,9,10,1,51,2,12,23,-138,6,14,25,63};
+	ElemTtype myArray_origin[] = {3,-176,-2,-61,17,9,10,1,51,2,12,23,-138,6,14,25,63};
 	//ElemTtype myArray_origin[] = {53,17,78,9,45,65,87,32};
 	int len = sizeof(myArray_origin)/sizeof(myArray_origin[0]);
 	cout<<"原数组：        ";
