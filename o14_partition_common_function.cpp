@@ -9,7 +9,7 @@
 using namespace std;
 
 //------------------------------------------------------------------------
-//1）不要求奇数和奇数，偶数和偶数之间的相对位置不变-----------
+//【1】不要求奇数和奇数，偶数和偶数之间的相对位置不变-----------
 //思路：类似于快排的划分函数，左右两个指针扫描，遇到不符合的交换，时间复杂度O（n）
 //注意：可使用函数指针，将划分的依据用函数指针传入，增强可扩展性--
 //--------------------------------------------------------------------------
@@ -55,18 +55,21 @@ void reOrderArray_no_function_pointer(vector<int> &array) {
 }
 
 //--------------------------------------------------------------------
-//2）要求奇数和奇数，偶数和偶数之间的相对位置不变-----------
+//【2】要求奇数和奇数，偶数和偶数之间的相对位置不变-----------
 //思路1：采用冒泡排序思想，两个for循环扫描，遇到奇数在左边的对，则交换，，直到某趟中不发生交换
 //     时间复杂度：O(n^2)
 //---------------------------------------------------------------------
-void reOrderHoldRelative(vector<int> &array, bool (*func)(int));
-void reOrderHoldRelative2(vector<int> &array, bool (*func)(int));
+void reOrderHoldRelative_bubble(vector<int> &array, bool (*func)(int));
+void reOrderHoldRelative_insert(vector<int> &array, bool (*func)(int));
+void reOrderArrayHoldRelative_mergeSort(vector<int>::iterator left, vector<int>::iterator right, bool (*func)(int));
 void reOrderArrayHoldRelative(vector<int> &array){
 	if(array.empty())
 		return;
-	reOrderHoldRelative2(array,isEven);				//用函数指针作为分割指标
+	//reOrderHoldRelative_bubble(array,isEven);				//用函数指针作为分割指标
+	//reOrderHoldRelative_insert(array,isEven);
+	reOrderArrayHoldRelative_mergeSort(array.begin(),array.end()-1,isEven);
 }
-void reOrderHoldRelative(vector<int> &array, bool (*func)(int)){
+void reOrderHoldRelative_bubble(vector<int> &array, bool (*func)(int)){
 	typedef vector<int>::iterator pIndex;
 	bool noSwap = true;
 	for(pIndex i = array.begin(); (i < array.end()-1) && noSwap==true; ++i){		//n-1趟
@@ -91,7 +94,7 @@ void reOrderHoldRelative(vector<int> &array, bool (*func)(int)){
 	}*/
 }
 //思路2---，采用插入排序思想，如果是奇数，插入到前面“已排好序”
-void reOrderHoldRelative2(vector<int> &array, bool (*func)(int)){
+void reOrderHoldRelative_insert(vector<int> &array, bool (*func)(int)){
 	typedef vector<int>::iterator pIndex;
 	//pIndex curLastEven = 0;
 	for(pIndex i = array.begin()+1; i < array.end(); ++i){
@@ -107,8 +110,36 @@ void reOrderHoldRelative2(vector<int> &array, bool (*func)(int)){
 	}
 }
 
-//思路3---采用归并排序---待完成-----------------------------
+//思路3---采用归并排序---归并排序时稳定排序中时间复杂度最低的o(nlog2(n))，但空间复杂度O(n)，则如果内存允许，可采用---
 //-----------------------------------------------------------
+typedef vector<int>::iterator pIndex;
+void merge(pIndex pleft,pIndex pmid,pIndex pright,bool (*func)(int));
+void reOrderArrayHoldRelative_mergeSort(pIndex pleft, pIndex pright, bool (*func)(int)){
+	typedef vector<int>::iterator pIndex;
+	if(pleft<pright){				//递归结束条件
+		pIndex pmid = (pright-pleft) / 2 + pleft;
+		reOrderArrayHoldRelative_mergeSort(pleft,pmid,func);
+		reOrderArrayHoldRelative_mergeSort(pmid+1,pright,func);
+		merge(pleft,pmid,pright,func);
+	}
+	
+}
+void merge(pIndex pleft,pIndex pmid,pIndex pright,bool (*func)(int)){
+	vector<int> temp;
+	pIndex pl=pleft,pr=pmid+1;
+	while(pl<=pmid && func(*pl))		//将左半段的奇数复制到temp
+		temp.push_back(*(pl++));
+	while(pr<=pright && func(*pr))		//将右半段的奇数复制到temp
+		temp.push_back(*(pr++));
+	while(pl<=pmid)						//左半段剩下的偶数
+		temp.push_back(*(pl++));	
+	while(pr<=pright)					//右半段剩下的偶数
+		temp.push_back(*(pr++));
+	//将排序好的辅助数组内容复制回原数组
+	pIndex pt=temp.begin(),it = pleft;
+	while(it<=pright)
+		*(it++) = *(pt++);
+}
 
 //打印序列的内容，给定起始地址,end为最后一个要打印的元素的下一位
 template<typename T>
@@ -118,16 +149,17 @@ void PrintSequence(const T pBegin, const T pEnd){
 	cout<<endl;
 }
 
-/*
+
 int main(){
 	int test1[] = {1,2,3,4,5,6,7};//{3,2,9,1,2,5,4,10,12};
 	vector<int> vtest1(test1, test1+sizeof(test1)/sizeof(test1[0]));
 	reOrderArray(vtest1); 
 	vector<int> vtest2(test1, test1+sizeof(test1)/sizeof(test1[0]));
 	reOrderArrayHoldRelative(vtest2);
+	cout<<"不稳定分块：  ";
 	PrintSequence(vtest1.begin(),vtest1.end());
+	cout<<"稳定分块：   ";
 	PrintSequence(vtest2.begin(),vtest2.end());
 	system("pause");
 	return 0;
 }
-*/

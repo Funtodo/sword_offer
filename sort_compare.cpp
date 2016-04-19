@@ -12,7 +12,7 @@ void printArray(ElemTtype* A,int len);
 //输入：待排表（int数组），数组长度
 //输出：升序排列的数组
 
-//直接插入排序，希尔排序；
+//直接/折半插入排序，希尔排序；
 //冒泡排序,快速排序；
 //简单选择排序，堆排序；
 //归并排序；
@@ -24,15 +24,13 @@ void InsertSort(ElemTtype* A,int len){
 	int i; //当前待排序元素位置
 	int j; //找到的插入位置
 
-	for( i=1; i<len; ++i ) //待排序的
-		if( A[i] < A[i -1]){ //如果当前元素小于其前驱，才需将其插入有序表
-			ElemTtype tmp = A[i]; //当前带插入元素
-
-			//查找插入位置，（从后往前查找）查找的同时将元素往后挪
-			for( j = i-1; j>=0 && tmp < A[j]; --j)
+	for( i=1; i<len; ++i )									//待排序的
+		if( A[i] < A[i -1]){								//如果当前元素小于其前驱，才需将其插入有序表
+			ElemTtype tmp = A[i];							//当前待插入元素										
+			for( j = i-1; j>=0 && tmp < A[j]; --j)			//查找插入位置，（从后往前查找）查找的同时将元素往后挪
 				A[j+1] = A[j];
 
-			A[j+1] = tmp; //复制到插入位置
+			A[j+1] = tmp;									//复制到插入位置
 		}
 
 }
@@ -279,6 +277,7 @@ void printArray(ElemTtype* A,int len){
 	cout<<endl;
 }
 
+/*
 int main()
 {
 	//ElemTtype myArray_origin[] = {3,18,2,6,17,9,10,1,5,2,12,23,18,6,14,25,6};
@@ -328,3 +327,4 @@ int main()
 	system("pause");
 	return 0;
 }
+*/
