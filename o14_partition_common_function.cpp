@@ -149,7 +149,7 @@ void PrintSequence(const T pBegin, const T pEnd){
 	cout<<endl;
 }
 
-
+/*
 int main(){
 	int test1[] = {1,2,3,4,5,6,7};//{3,2,9,1,2,5,4,10,12};
 	vector<int> vtest1(test1, test1+sizeof(test1)/sizeof(test1[0]));
@@ -163,3 +163,4 @@ int main(){
 	system("pause");
 	return 0;
 }
+*/
