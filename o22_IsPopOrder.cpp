@@ -35,6 +35,7 @@ bool IsPopOrder(vector<int> pushV,vector<int> popV) {
 	return true;
 }
 
+/*
 int main(){
 	int pushA[] = {1,2,3,4,5};
 	int popA[] = {4,5,3,2,1};
@@ -62,3 +63,4 @@ int main(){
 
 	system("pause");
 }
+*/
