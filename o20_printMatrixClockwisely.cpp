@@ -47,6 +47,7 @@ void printMatrixInCircle(int** matrix,int rows,int columns,int start){
 vector<int> printMatrix(vector<vector<int> > matrix);
 void printMatrixInCircle_vector(vector<vector<int> > matrix,vector<int> &result,int start);
 
+/*
 int main(){
 	int array1[][4] = {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};		//功能测试
 	printMatrixClockwisely((int**)array1,4,4);
@@ -72,6 +73,7 @@ int main(){
 	system("pause");
 	return 0;
 }
+*/
 
 //----牛客网，采用vector，且返回vector形式-----
 vector<int> printMatrix(vector<vector<int> > matrix) {
