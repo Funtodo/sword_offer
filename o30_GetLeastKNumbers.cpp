@@ -85,6 +85,7 @@ template<typename T> void printVector(const vector<T> &input){
 	cout<<endl;
 }
 
+/*
 int main(){
 	vector<int> array;
 	int temp,k;
@@ -105,3 +106,4 @@ int main(){
 	}
 	system("pause");
 }
+*/
