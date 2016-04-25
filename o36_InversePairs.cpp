@@ -3,6 +3,9 @@
 #include <iostream>
 using namespace std;
 
+//问题描述：统计数组中的逆序对
+//思路：采用归并排序思想；
+
 int InversePairsCore(vector<int> &data,vector<int> &copy,int pLeft,int pRight);
 int InversePairs(vector<int> data) {
 	if(data.size()==0)
@@ -42,6 +45,7 @@ int InversePairsCore(vector<int> &data,vector<int> &copy,int iLeft,int iRight){
 	return countLeft+countRight+countMerge;
 }
 
+/*
 int main(){
 	vector<int> numbers;
 	int temp;
@@ -58,3 +62,4 @@ int main(){
 	}
 	system("pause");
 }
+*/
