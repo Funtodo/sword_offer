@@ -97,7 +97,7 @@ public:
 };
 
 
-
+/*
 int _tmain(int argc, _TCHAR* argv[])
 {
 	Solution test;
@@ -134,3 +134,4 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	return 0;
 }
+*/
