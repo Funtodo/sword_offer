@@ -6,11 +6,11 @@ using namespace std;
 void multiply(const vector<double>& array1, vector<double>& array2){
 	if(array1.size()<=1 || array1.size()!=array2.size())
 		return;
-	array2[0] = 1;
+	array2[0] = 1.0;
 	for(int i=1;i<array1.size();++i){
 		array2[i] = array2[i-1] * array1[i-1];
 	}
-	int tmp = 1;
+	double tmp = 1.0;
 	for(int j=array1.size()-2;j>=0;--j){
 		tmp *= array1[j+1];
 		array2[j] *= tmp;
