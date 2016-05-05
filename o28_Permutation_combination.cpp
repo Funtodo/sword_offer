@@ -139,7 +139,63 @@ vector<string> combination_binary(string str){
 	return result;
 }
 
+//=======字符串全排列问题扩展==============
+
+//【八皇后问题】任意两个皇后不能处于同一行、同一列或者同一对角斜线上。
+//思路：由于八个皇后的任意两个不能处在同一行，那么这肯定是每一个皇后占据一行。
+//     于是我们可以定义一个数组ColumnIndex[8]，数组中第i个数字表示位于第i行的皇后的列号。
+//     先把ColumnIndex的八个数字分别用0-7初始化，接下来我们要做的事情就是对数组ColumnIndex做全排列。
+//     由于我们是用不同的数字初始化数组中的数字，因此任意两个皇后肯定不同列。
+//     我们只需要判断得到的每一个排列对应的八个皇后是不是在同一对角斜线上，也就是数组的两个下标i和j，
+//     是不是i-j==ColumnIndex[i]-Column[j]或者j-i==ColumnIndex[i]-ColumnIndex[j]。
+int g_number = 0;
+bool Check(int ColumnIndex[] , int length);
+void print_status(int ColumnIndex[] , int length);
+void Permutation(int ColumnIndex[], int len, int index);
+void EightQueen(int queens){
+	if(queens<3)   return;
+	int *ColumnIndex = new int[queens];
+	for(int i=0;i<queens;++i)	//用0~7初始化（假设queens=8）
+		ColumnIndex[i] = i;
+
+	Permutation(ColumnIndex, queens, 0);
+
+	delete ColumnIndex;
+}
+void Permutation(int ColumnIndex[], int len, int index){
+	if(index==len){		//完成一个排列
+		if(Check(ColumnIndex,len)){			//检测当前排列对应的棋盘状态是否合法
+			++g_number;
+			print_status(ColumnIndex,len);
+		}
+	}else{
+		for(int i=index;i<len;++i){
+			swap(ColumnIndex[index],ColumnIndex[i]);
+			Permutation(ColumnIndex,len,index+1);
+			swap(ColumnIndex[index],ColumnIndex[i]);
+		}
+	}
+}
+
+bool Check(int ColumnIndex[], int length){  
+	int i,j;  
+	for(i = 0 ; i < length; ++i)  
+		for(j = i + 1 ; j < length; ++j)  
+			if( i - j == ColumnIndex[i] - ColumnIndex[j] || j - i == ColumnIndex[i] - ColumnIndex[j])   //在正、副对角线上  
+				return false;
+	return true;
+}
+void print_status(int ColumnIndex[] , int length){  
+	printf("%d\n",g_number);  
+	for(int i = 0 ; i < length; ++i)  
+		printf("%d ",ColumnIndex[i]);  
+	printf("\n");  
+}
 void main(){
+
+	int queens=9;	//皇后数（也即棋盘格数目）
+	EightQueen(queens);
+
 	string str;
 	cout<<"输入一个字符串（允许有重复字符）："<<endl;
 	while(cin>>str){
@@ -169,5 +225,6 @@ void main(){
 		cout<<"输入下一个字符串："<<endl;
 		cin.clear();  cin.sync();
 	}
+
 	system("pause");
 }
