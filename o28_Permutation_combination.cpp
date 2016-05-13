@@ -191,6 +191,7 @@ void print_status(int ColumnIndex[] , int length){
 		printf("%d ",ColumnIndex[i]);  
 	printf("\n");  
 }
+/*
 void main(){
 
 	int queens=9;	//皇后数（也即棋盘格数目）
@@ -228,3 +229,4 @@ void main(){
 
 	system("pause");
 }
+*/
