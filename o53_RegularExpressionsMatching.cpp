@@ -46,12 +46,12 @@ bool matchCore_2(char* str, char* pattern){
 		return false;
 	
 	if( *(pattern+1)=='*'){
-		if( (*pattern=='.'&& (*str!='\0')) ||  (*str==*pattern) )
+		if( (*pattern=='.'&& (*str!='\0')) ||  (*str==*pattern) )		//当前匹配情况下
 			return matchCore(str,pattern+2)		//*前面一个字符出现0次
 				|| matchCore(str+1,pattern+2)	//出现1次；
 				|| matchCore(str+1,pattern);	//出现>1次；
-		else
-			return matchCore(str,pattern+2);
+		else									
+			return matchCore(str,pattern+2);		//当前不匹配情况下，只可能是出现0次
 	}
 	//下一位不是 * ，则只需要根据当前位给出匹配情况
 	if( (*pattern=='.' && *str!='\0') || *str==*pattern)
