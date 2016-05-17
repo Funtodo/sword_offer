@@ -81,8 +81,8 @@ void printListZF(struct ListNode* head) {
 
 // Îª²âÊÔÌí¼ÓµÄÆäËûº¯Êı----
 //Ìí¼Ó½Úµãµ½Á´±íÎ²²¿
-// µ÷ÓÃÊ±£¬AddToTail(&head,1);
-void AddToTail(struct ListNode **head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖµ£¬Ôò±ØĞë´«ÈëheadµÄµØÖ·£¬&head£¬¼´ListNode **
+// µ÷ÓÃÊ±£¬AAddToTail(&head,1);
+void AAAddToTail(struct ListNode **head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖµ£¬Ôò±ØĞë´«ÈëheadµÄµØÖ·£¬&head£¬¼´ListNode **
 	//ListNode pNew(value); //£¡£¡£¡Ò»¶¨×¢Òâ£¬£¬Á´±íÒª¶¯Ì¬ÉêÇë½Úµã¿Õ¼ä£¡£¡£¡
 	ListNode *pNew = new ListNode(value);
 	if(*head == NULL){
@@ -96,8 +96,8 @@ void AddToTail(struct ListNode **head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖµ£¬Ôò±ØĞë´«Èë
 	pNode->next = pNew;
 }
 // -- ´«ÈëÖ¸ÕëµÄÒıÓÃ×÷Îª²ÎÊı£¬£¬º¯ÊıÌåÊ¹ÓÃhead£¬²»ĞèÒª½âµØÖ·²Ù×÷
-// ÏàÓ¦µÄ£¬µ÷ÓÃÊ±£¬Ò²²»ĞèÒªÈ¡µØÖ·²Ù×÷£¬Ö±½Ó AddToTail(head,1);
-void AddToTail_useReference(struct ListNode *&head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖµ£¬Ôò¿ÉÒÔ´«ÈëÖ¸ÕëheadµÄÒıÓÃ
+// ÏàÓ¦µÄ£¬µ÷ÓÃÊ±£¬Ò²²»ĞèÒªÈ¡µØÖ·²Ù×÷£¬Ö±½Ó AAddToTail(head,1);
+void AAddToTail_useReference(struct ListNode *&head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖµ£¬Ôò¿ÉÒÔ´«ÈëÖ¸ÕëheadµÄÒıÓÃ
 	//ListNode pNew(value); //£¡£¡£¡Ò»¶¨×¢Òâ£¬£¬Á´±íÒª¶¯Ì¬ÉêÇë½Úµã¿Õ¼ä£¡£¡£¡
 	ListNode *pNew = new ListNode(value);
 	if(head == NULL){
@@ -112,7 +112,7 @@ void AddToTail_useReference(struct ListNode *&head,int value){ //¿ÉÄÜĞŞ¸ÄheadµÄÖ
 }
 
 // É¾³ıµÚÒ»¸öÖµÎªvalueµÄ½Úµã
-void RemoveNode(struct ListNode **head,int value){
+void RRemoveNode(struct ListNode **head,int value){
 	if(*head==NULL)
 		return;
 	ListNode *pToRemoved = NULL;
@@ -148,46 +148,46 @@ void toEmptyList(struct ListNode **head){
 		cout<<"List is Emptied"<<endl;
 }
 
-
+/*
 int main(){
 	
 	ListNode *head = NULL;
 	// ²âÊÔ£º
-	RemoveNode(&head,2); //²âÊÔ£ºÁ´±íÎª¿ÕÊ±É¾³ı
+	RRemoveNode(&head,2); //²âÊÔ£ºÁ´±íÎª¿ÕÊ±É¾³ı
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	AddToTail(&head,1);	//²âÊÔ£ºÌí¼ÓµÚÒ»¸ö½Úµã£»
-	//test.AddToTail_useReference(head,1);	//²âÊÔ£ºÌí¼ÓµÚÒ»¸ö½Úµã£»
+	AAddToTail(&head,1);	//²âÊÔ£ºÌí¼ÓµÚÒ»¸ö½Úµã£»
+	//test.AAddToTail_useReference(head,1);	//²âÊÔ£ºÌí¼ÓµÚÒ»¸ö½Úµã£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	RemoveNode(&head,1);	//²âÊÔ£ºÖ»ÓĞÒ»¸ö½ÚµãÊ±É¾³ı£»
+	RRemoveNode(&head,1);	//²âÊÔ£ºÖ»ÓĞÒ»¸ö½ÚµãÊ±É¾³ı£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-    AddToTail(&head,1);	//²âÊÔ£ºÉ¾³ıºóÌí¼ÓµÚÒ»¸ö½Úµã£»
+    AAddToTail(&head,1);	//²âÊÔ£ºÉ¾³ıºóÌí¼ÓµÚÒ»¸ö½Úµã£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 	
-	AddToTail(&head,2);	//²âÊÔ£ºÌí¼Ó£»
+	AAddToTail(&head,2);	//²âÊÔ£ºÌí¼Ó£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	AddToTail(&head,3);	//²âÊÔ£ºÌí¼Ó£»
+	AAddToTail(&head,3);	//²âÊÔ£ºÌí¼Ó£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	AddToTail(&head,4);	//²âÊÔ£ºÌí¼Ó£»
+	AAddToTail(&head,4);	//²âÊÔ£ºÌí¼Ó£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	AddToTail(&head,5);	//²âÊÔ£ºÌí¼Ó£»
+	AAddToTail(&head,5);	//²âÊÔ£ºÌí¼Ó£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	AddToTail(&head,6);	//²âÊÔ£ºÌí¼Ó£»
+	AAddToTail(&head,6);	//²âÊÔ£ºÌí¼Ó£»
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 	
-	RemoveNode(&head,1);	//²âÊÔ£ºÉ¾³ı¿ªÍ·
+	RRemoveNode(&head,1);	//²âÊÔ£ºÉ¾³ı¿ªÍ·
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	RemoveNode(&head,4);	//²âÊÔ£ºÉ¾³ıÖĞ¼ä
+	RRemoveNode(&head,4);	//²âÊÔ£ºÉ¾³ıÖĞ¼ä
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
-	RemoveNode(&head,6);	//²âÊÔ£ºÉ¾³ı×îºó
+	RRemoveNode(&head,6);	//²âÊÔ£ºÉ¾³ı×îºó
 	printListZF(head);  // ÕıÏò·´Ïò´òÓ¡
 
 	toEmptyList(&head);
@@ -195,3 +195,4 @@ int main(){
 	system("pause");
 	return 0;
 }
+*/

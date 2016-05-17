@@ -137,8 +137,8 @@ void MyList::printList(){
 /*
 int main(){
 	{
-	MyList myList;	//定义一个对象，调用默认构造函数或无参构造函数；myList.AddToTail(0)
-	//MyList *myList = new MyList; // new返回对象的指针；myList->AddToTail(0) 或 (*myList).AddToTail(0);
+	MyList myList;	//定义一个对象，调用默认构造函数或无参构造函数；myList.AAddToTail(0)
+	//MyList *myList = new MyList; // new返回对象的指针；myList->AAddToTail(0) 或 (*myList).AddToTail(0);
 	// 测试：
 	myList.RemoveNode(2); //测试：链表为空时删除
 	myList.printList(); myList.PrintListReversingly();  // 正向反向打印
